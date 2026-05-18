@@ -1,0 +1,69 @@
+/**
+ * The Brand Vue — color palette
+ *
+ * Surfaces: dark / gray / white
+ * Accent:   teal scale (primary actions, links, highlights)
+ */
+
+:root {
+  /* ── Core palette ── */
+  --surface-dark: #05080e;
+  --surface-gray: #aaa8aa;
+  --surface-white: #ffffff;
+
+  --accent: #07bcae;
+  --accent-light: #3dd4c4;
+  --accent-dark: #059687;
+
+  /* ── Derived ── */
+  --accent-hover: var(--accent-dark);
+  --accent-soft: color-mix(in srgb, var(--accent) 14%, white);
+  --accent-muted: color-mix(in srgb, var(--accent) 55%, var(--surface-gray));
+  --surface-gray-soft: color-mix(in srgb, var(--surface-gray) 18%, white);
+  --surface-dark-soft: color-mix(in srgb, var(--surface-dark) 92%, var(--surface-gray));
+
+  /* ── Semantic (app-wide) ── */
+  --background: var(--surface-white);
+  --foreground: var(--surface-dark);
+  --muted-foreground: var(--surface-gray);
+
+  /* Hero image overlay */
+  --hero-overlay-color: var(--surface-dark);
+  --hero-overlay-opacity: 0.88;
+}
+
+@theme inline {
+  /* Surfaces */
+  --color-surface-dark: var(--surface-dark);
+  --color-surface-gray: var(--surface-gray);
+  --color-surface-white: var(--surface-white);
+  --color-surface-gray-soft: var(--surface-gray-soft);
+  --color-surface-dark-soft: var(--surface-dark-soft);
+
+  /* Accent scale */
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-accent-dark: var(--accent-dark);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-muted: var(--accent-muted);
+
+  /* Semantic */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--surface-gray);
+  --color-muted-foreground: var(--muted-foreground);
+
+  /**
+   * Legacy `brand-*` utilities → accent + surfaces
+   * (keeps existing components working)
+   */
+  --color-brand: var(--accent);
+  --color-brand-hover: var(--accent-hover);
+  --color-brand-soft: var(--accent-soft);
+  --color-brand-muted: var(--surface-gray);
+  --color-brand-muted-soft: var(--surface-gray-soft);
+
+  --font-sans: var(--font-brand-sans);
+  --font-display: var(--font-brand-display);
+}

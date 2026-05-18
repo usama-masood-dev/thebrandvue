@@ -6,9 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "verify:wordpress": "node --env-file=.env.local scripts/verify-wordpress.mjs"
   },
   "dependencies": {
+    "@apollo/client": "^4.1.9",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
+    "graphql": "^16.14.0",
+    "motion": "^12.38.0",
     "next": "16.2.6",
     "react": "19.2.4",
     "react-dom": "19.2.4"
