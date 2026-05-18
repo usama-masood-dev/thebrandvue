@@ -17,7 +17,7 @@ export function SimpleHeader({ className, hidden }: SimpleHeaderProps) {
         hidden ? "pointer-events-none opacity-0" : "opacity-100"
       } ${className ?? ""}`}
     >
-      <HeaderShell className="relative">
+      <HeaderShell className="py-3 sm:py-4 lg:py-5">
         <HeaderLogo variant="dark" />
         <HeaderCenter>
           <HeaderNavDesktop items={mainNavItems} theme="overlay" />

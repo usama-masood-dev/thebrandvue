@@ -23,7 +23,7 @@ export function HeaderLogo({ className, variant = "light" }: HeaderLogoProps) {
         width={200}
         height={64}
         priority
-        className="h-10 w-auto sm:h-11"
+        className="h-auto w-[140px] max-w-[42vw] sm:w-[170px] md:w-[200px]"
       />
     </Link>
   );

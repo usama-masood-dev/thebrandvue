@@ -2,20 +2,48 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { HeaderCta } from "./header-cta";
 import type { NavItem } from "@/lib/navigation/main-nav";
 
 export type HeaderTheme = "default" | "overlay";
 
-function navLinkClass(isActive: boolean, theme: HeaderTheme) {
+/** Light header → dark text. Dark/hero header → light text. */
+function getNavTheme(theme: HeaderTheme) {
   if (theme === "overlay") {
-    return isActive
-      ? "bg-white text-accent"
-      : "text-white/90 hover:text-white";
+    return {
+      link: "text-white/90 hover:text-white",
+      linkActive: "bg-white text-accent",
+      dropdown: "text-white/90 hover:text-white",
+      dropdownChild:
+        "text-white/90 hover:bg-white/10 hover:text-white",
+      chevron: "text-white/70",
+      menuLabel: "text-white/80",
+      menuClose: "text-white hover:bg-white/10",
+      hamburger: "text-white",
+      mobileLink: "text-white hover:bg-white/10",
+      mobileChild: "text-white/85 hover:bg-white/10 hover:text-white",
+    };
   }
-  return isActive
-    ? "bg-accent text-white"
-    : "text-surface-gray hover:text-accent";
+  return {
+    link: "text-surface-dark hover:text-accent",
+    linkActive: "bg-accent text-white",
+    dropdown: "text-surface-dark hover:text-accent",
+    dropdownChild:
+      "text-surface-dark/85 hover:bg-accent-soft hover:text-accent",
+    chevron: "text-surface-dark/55",
+    menuLabel: "text-surface-dark/70",
+    menuClose: "text-surface-dark hover:bg-accent-soft",
+    hamburger: "text-surface-dark",
+    mobileLink: "text-surface-dark hover:bg-accent-soft hover:text-accent",
+    mobileChild:
+      "text-surface-dark/80 hover:bg-accent-soft hover:text-accent",
+  };
+}
+
+function navLinkClass(isActive: boolean, theme: HeaderTheme) {
+  const styles = getNavTheme(theme);
+  return isActive ? styles.linkActive : styles.link;
 }
 
 type HeaderNavDesktopProps = {
@@ -74,64 +102,146 @@ export function HeaderMobileMenu({
   theme = "default",
 }: HeaderMobileMenuProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [expandedItem, setExpandedItem] = useState<string | null>(null);
+  const pathname = usePathname();
   const isOverlay = theme === "overlay";
 
+  const closeMenu = useCallback(() => {
+    setMobileOpen(false);
+    setExpandedItem(null);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeMenu();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [closeMenu]);
+
+  useEffect(() => {
+    closeMenu();
+  }, [pathname, closeMenu]);
+
+  const panelBg = isOverlay ? "bg-surface-dark" : "bg-white";
+  const borderClass = isOverlay ? "border-white/10" : "border-surface-gray/20";
+  const nav = getNavTheme(theme);
+
   return (
-    <div className="relative lg:hidden">
+    <div className="lg:hidden">
       <button
         type="button"
-        className={`inline-flex items-center justify-center rounded-lg p-2 ${
-          isOverlay ? "text-white" : "text-accent"
-        }`}
+        className={`inline-flex size-10 items-center justify-center rounded-lg ${nav.hamburger}`}
         aria-expanded={mobileOpen}
-        aria-controls="mobile-nav"
+        aria-controls="mobile-nav-panel"
         aria-label={mobileOpen ? "Close menu" : "Open menu"}
-        onClick={() => setMobileOpen((v) => !v)}
+        onClick={() => setMobileOpen((open) => !open)}
       >
         <MenuIcon open={mobileOpen} />
       </button>
 
       {mobileOpen ? (
-        <div
-          id="mobile-nav"
-          className={`absolute inset-x-0 top-full border-t px-4 py-4 shadow-lg ${
-            isOverlay
-              ? "border-white/10 bg-surface-dark"
-              : "border-surface-gray/25 bg-white"
-          }`}
-        >
-          <ul className="flex flex-col gap-1">
-            {items.map((item) => (
-              <li key={item.label}>
-                <Link
-                  href={item.href}
-                  className={`block rounded-lg px-3 py-2.5 text-sm font-semibold uppercase tracking-wide ${
-                    isOverlay
-                      ? "text-white hover:bg-white/10"
-                      : "text-surface-gray hover:bg-accent-soft hover:text-accent"
-                  }`}
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {item.label}
-                </Link>
-                {item.children?.map((child) => (
-                  <Link
-                    key={child.label}
-                    href={child.href}
-                    className={`block rounded-lg py-2 pl-6 pr-3 text-sm ${
-                      isOverlay
-                        ? "text-white/80 hover:text-white"
-                        : "text-surface-gray hover:text-accent"
-                    }`}
-                    onClick={() => setMobileOpen(false)}
+        <>
+          <button
+            type="button"
+            aria-label="Close menu backdrop"
+            className="fixed inset-0 z-[60] bg-black/55 backdrop-blur-[2px] lg:hidden"
+            onClick={closeMenu}
+          />
+          <nav
+            id="mobile-nav-panel"
+            className={`fixed inset-x-0 top-0 z-[70] flex max-h-[100dvh] flex-col shadow-xl lg:hidden ${panelBg}`}
+            aria-label="Mobile navigation"
+          >
+            <div
+              className={`flex shrink-0 items-center justify-between border-b px-4 py-3 sm:px-6 ${borderClass}`}
+            >
+              <span
+                className={`text-sm font-semibold uppercase tracking-wider ${nav.menuLabel}`}
+              >
+                Menu
+              </span>
+              <button
+                type="button"
+                onClick={closeMenu}
+                aria-label="Close menu"
+                className={`inline-flex size-10 items-center justify-center rounded-lg ${nav.menuClose}`}
+              >
+                <MenuIcon open />
+              </button>
+            </div>
+
+            <ul className="flex-1 overflow-y-auto overscroll-contain px-4 py-3 sm:px-6">
+              {items.map((item) => {
+                const hasChildren = Boolean(item.children?.length);
+                const isExpanded = expandedItem === item.label;
+
+                return (
+                  <li
+                    key={item.label}
+                    className={`border-b last:border-0 ${borderClass}`}
                   >
-                    {child.label}
-                  </Link>
-                ))}
-              </li>
-            ))}
-          </ul>
-        </div>
+                    {hasChildren ? (
+                      <>
+                        <button
+                          type="button"
+                          className={`flex w-full items-center justify-between rounded-lg px-3 py-3.5 text-left text-sm font-semibold uppercase tracking-wide ${nav.mobileLink}`}
+                          aria-expanded={isExpanded}
+                          onClick={() =>
+                            setExpandedItem(isExpanded ? null : item.label)
+                          }
+                        >
+                          {item.label}
+                          <ChevronDown
+                            className={`size-4 transition-transform ${
+                              isExpanded ? "rotate-180" : ""
+                            } ${nav.chevron}`}
+                          />
+                        </button>
+                        {isExpanded ? (
+                          <ul className="pb-2 pl-2">
+                            {item.children!.map((child) => (
+                              <li key={child.label}>
+                                <Link
+                                  href={child.href}
+                                  className={`block rounded-lg px-3 py-2.5 text-sm ${nav.mobileChild}`}
+                                  onClick={closeMenu}
+                                >
+                                  {child.label}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
+                      </>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        className={`block rounded-lg px-3 py-3.5 text-sm font-semibold uppercase tracking-wide ${nav.mobileLink}`}
+                        onClick={closeMenu}
+                      >
+                        {item.label}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+
+            <div
+              className={`shrink-0 border-t px-4 py-4 sm:px-6 ${borderClass}`}
+            >
+              <HeaderCta theme={theme} mobile />
+            </div>
+          </nav>
+        </>
       ) : null}
     </div>
   );
@@ -151,6 +261,7 @@ function NavDropdown({
   onClose: () => void;
 }) {
   const isOverlay = theme === "overlay";
+  const nav = getNavTheme(theme);
 
   return (
     <div
@@ -160,18 +271,12 @@ function NavDropdown({
     >
       <Link
         href={item.href}
-        className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-xs font-semibold uppercase tracking-wider transition-colors xl:px-3.5 xl:text-[13px] ${
-          isOverlay
-            ? "text-white/90 hover:text-white"
-            : "text-surface-gray hover:text-accent"
-        }`}
+        className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-xs font-semibold uppercase tracking-wider transition-colors xl:px-3.5 xl:text-[13px] ${nav.dropdown}`}
         aria-expanded={open}
         aria-haspopup="true"
       >
         {item.label}
-        <ChevronDown
-          className={isOverlay ? "text-white/70" : "text-surface-gray"}
-        />
+        <ChevronDown className={nav.chevron} />
       </Link>
       {open ? (
         <ul
@@ -187,11 +292,7 @@ function NavDropdown({
               <Link
                 href={child.href}
                 role="menuitem"
-                className={`block px-4 py-2.5 text-sm transition-colors ${
-                  isOverlay
-                    ? "text-white/90 hover:bg-white/10 hover:text-white"
-                    : "text-surface-gray hover:bg-accent-soft hover:text-accent"
-                }`}
+                className={`block px-4 py-2.5 text-sm transition-colors ${nav.dropdownChild}`}
               >
                 {child.label}
               </Link>
@@ -206,7 +307,7 @@ function NavDropdown({
 function ChevronDown({ className }: { className?: string }) {
   return (
     <svg
-      className={`size-3.5 ${className ?? ""}`}
+      className={`size-3.5 shrink-0 ${className ?? ""}`}
       viewBox="0 0 20 20"
       fill="currentColor"
       aria-hidden

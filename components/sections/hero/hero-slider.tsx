@@ -61,28 +61,28 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                 style={{ opacity: "var(--hero-overlay-opacity, 0.82)" }}
                 aria-hidden
               />
-              <div className="relative z-10 flex min-h-[min(100vh,920px)] flex-col items-center justify-center px-4 pb-16 pt-28 sm:px-6 sm:pt-32 lg:pt-36">
-                <div className="mx-auto flex w-full max-w-2xl flex-col items-center text-center">
-                  <p className="max-w-md text-xs font-semibold uppercase tracking-[0.18em] text-white/90 sm:text-sm">
+              <div className="relative z-10 flex min-h-[min(100vh,920px)] flex-col items-center justify-center px-4 pb-20 pt-[5.5rem] sm:px-6 sm:pb-24 sm:pt-32 md:pt-36 lg:pt-40">
+                <div className="mx-auto flex w-full max-w-2xl flex-col items-center px-1 text-center sm:px-2">
+                  <p className="max-w-[18rem] text-[0.7rem] font-semibold uppercase leading-relaxed tracking-[0.14em] text-white/90 sm:max-w-md sm:text-xs md:text-sm">
                     {slide.eyebrow}
                   </p>
-                  <h1 className="mt-5 max-w-xl font-display text-balance text-3xl font-semibold leading-[1.2] text-white sm:text-4xl lg:text-[2.75rem] lg:leading-[1.18]">
+                  <h1 className="mt-4 max-w-[20rem] font-display text-balance text-[1.65rem] font-semibold leading-[1.2] text-white sm:mt-5 sm:max-w-xl sm:text-3xl md:text-4xl lg:text-[2.75rem] lg:leading-[1.18]">
                     {slide.title}
                   </h1>
-                  <p className="mt-5 max-w-lg text-pretty text-sm leading-relaxed text-white/90 sm:text-base">
+                  <p className="mt-4 max-w-[18rem] text-pretty text-sm leading-relaxed text-white/90 sm:mt-5 sm:max-w-lg md:text-base">
                     {slide.description}
                   </p>
-                  <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+                  <div className="mt-6 flex w-full max-w-sm flex-col items-stretch gap-3 sm:mt-8 sm:max-w-none sm:flex-row sm:items-center sm:justify-center sm:gap-4">
                     <Link
                       href={slide.primaryCta.href}
-                      className="inline-flex min-w-[200px] items-center justify-center rounded-full bg-white px-6 py-3 text-xs font-bold uppercase tracking-wider text-accent transition-colors hover:bg-white/90 sm:text-sm"
+                      className="inline-flex w-full items-center justify-center rounded-full bg-white px-5 py-3 text-center text-[0.7rem] font-bold uppercase leading-snug tracking-wider text-accent transition-colors hover:bg-white/90 sm:w-auto sm:min-w-[200px] sm:px-6 sm:text-xs md:text-sm"
                     >
                       {slide.primaryCta.label}
                     </Link>
                     {slide.secondaryCta ? (
                       <Link
                         href={slide.secondaryCta.href}
-                        className="inline-flex min-w-[200px] items-center justify-center rounded-full border border-white/80 bg-accent px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-accent-hover sm:text-sm"
+                        className="inline-flex w-full items-center justify-center rounded-full border border-white/80 bg-accent px-5 py-3 text-center text-[0.7rem] font-bold uppercase leading-snug tracking-wider text-white transition-colors hover:bg-accent-hover sm:w-auto sm:min-w-[200px] sm:px-6 sm:text-xs md:text-sm"
                       >
                         {slide.secondaryCta.label}
                       </Link>
@@ -98,7 +98,7 @@ export function HeroSlider({ slides }: HeroSliderProps) {
       <HeroArrow direction="prev" onClick={scrollPrev} />
       <HeroArrow direction="next" onClick={scrollNext} />
 
-      <div className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 gap-2">
+      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 gap-2 sm:bottom-8">
         {slides.map((slide, index) => (
           <button
             key={slide.id}
@@ -131,8 +131,8 @@ function HeroArrow({
       type="button"
       onClick={onClick}
       aria-label={label}
-      className={`absolute top-1/2 z-20 flex size-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20 sm:size-12 ${
-        direction === "prev" ? "left-3 sm:left-6" : "right-3 sm:right-6"
+      className={`absolute top-1/2 z-20 hidden size-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20 min-[480px]:flex sm:size-11 md:size-12 ${
+        direction === "prev" ? "left-2 sm:left-4 md:left-6" : "right-2 sm:right-4 md:right-6"
       }`}
     >
       <svg
