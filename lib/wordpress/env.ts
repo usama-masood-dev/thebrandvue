@@ -7,7 +7,7 @@ function requireEnv(name: string, value: string | undefined): string {
   return value.trim().replace(/\/$/, "");
 }
 
-function parseUrl(name: string, value: string): string {
+function parseSiteOrigin(name: string, value: string): string {
   try {
     const url = new URL(value);
     if (url.protocol !== "https:" && url.protocol !== "http:") {
@@ -21,18 +21,33 @@ function parseUrl(name: string, value: string): string {
   }
 }
 
+/** Keeps the full endpoint path (e.g. /graphql) — do not reduce to origin only. */
+function parseGraphqlEndpoint(name: string, value: string): string {
+  try {
+    const url = new URL(value.trim());
+    if (url.protocol !== "https:" && url.protocol !== "http:") {
+      throw new Error("URL must use http or https");
+    }
+    return url.toString().replace(/\/$/, "");
+  } catch {
+    throw new Error(
+      `Invalid ${name}: "${value}". Expected the full GraphQL URL (e.g. https://dev.thebrandvue.com/graphql).`,
+    );
+  }
+}
+
 let cached: { wpSiteUrl: string; wpGraphqlUrl: string; wpHostname: string } | null =
   null;
 
 export function getWordPressEnv() {
   if (cached) return cached;
 
-  const wpSiteUrl = parseUrl(
+  const wpSiteUrl = parseSiteOrigin(
     "NEXT_PUBLIC_WP_URL",
     requireEnv("NEXT_PUBLIC_WP_URL", process.env.NEXT_PUBLIC_WP_URL),
   );
 
-  const wpGraphqlUrl = parseUrl(
+  const wpGraphqlUrl = parseGraphqlEndpoint(
     "WP_GRAPHQL_URL",
     requireEnv("WP_GRAPHQL_URL", process.env.WP_GRAPHQL_URL),
   );

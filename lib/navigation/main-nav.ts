@@ -1,29 +1,13 @@
-export type NavItem = {
-  label: string;
-  href: string;
-  children?: { label: string; href: string }[];
-};
+export type { NavChildItem, NavItem } from "./nav-types";
+export { buildMainNavItems } from "./build-nav";
 
-/** Primary navigation — refined labels from legacy Elemonter menu */
-export const mainNavItems: NavItem[] = [
-  { label: "Home", href: "/" },
-  {
-    label: "Services",
-    href: "#services",
-    children: [
-      { label: "Web Development", href: "#services" },
-      { label: "Digital Marketing", href: "#services" },
-      { label: "View All Services", href: "#services" },
-    ],
-  },
-  { label: "Portfolio", href: "#portfolio" },
-  { label: "Clients", href: "#clients" },
-  { label: "Team", href: "#team" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
-];
+import { buildMainNavItems } from "./build-nav";
+import type { NavItem } from "./nav-types";
+
+/** Fallback when CMS services are unavailable */
+export const mainNavItems: NavItem[] = buildMainNavItems([]);
 
 export const headerCta = {
   label: "Schedule a Call",
-  href: "#contact",
+  href: "/#contact",
 } as const;

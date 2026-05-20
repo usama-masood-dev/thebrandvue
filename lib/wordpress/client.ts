@@ -31,6 +31,13 @@ export type FetchGraphQLOptions = {
   tags?: CacheTag[];
 };
 
+function shouldBypassWordPressCache(): boolean {
+  return (
+    process.env.NODE_ENV === "development" ||
+    process.env.WORDPRESS_CACHE_BYPASS === "1"
+  );
+}
+
 export async function fetchGraphQL<T>(
   query: string,
   options: FetchGraphQLOptions = {},
@@ -38,6 +45,8 @@ export async function fetchGraphQL<T>(
   const { wpGraphqlUrl } = getWordPressEnv();
   const { variables, revalidate = WORDPRESS_REVALIDATE_SECONDS, tags } =
     options;
+  const cacheTags = tags ?? [CACHE_TAGS.wordpress];
+  const bypassCache = shouldBypassWordPressCache();
 
   const response = await fetch(wpGraphqlUrl, {
     method: "POST",
@@ -46,10 +55,14 @@ export async function fetchGraphQL<T>(
       Accept: "application/json",
     },
     body: JSON.stringify({ query, variables }),
-    next: {
-      revalidate: revalidate === false ? undefined : revalidate,
-      tags: tags ?? [CACHE_TAGS.wordpress],
-    },
+    ...(bypassCache
+      ? { cache: "no-store" as const }
+      : {
+          next: {
+            revalidate: revalidate === false ? undefined : revalidate,
+            tags: cacheTags,
+          },
+        }),
   });
 
   if (!response.ok) {
@@ -58,7 +71,23 @@ export async function fetchGraphQL<T>(
     );
   }
 
-  const json = (await response.json()) as GraphQLResponse<T>;
+  const contentType = response.headers.get("content-type") ?? "";
+  const rawBody = await response.text();
+
+  if (!contentType.includes("application/json")) {
+    throw new Error(
+      `WordPress GraphQL returned non-JSON (${contentType || "unknown"}). Check WP_GRAPHQL_URL.`,
+    );
+  }
+
+  let json: GraphQLResponse<T>;
+  try {
+    json = JSON.parse(rawBody) as GraphQLResponse<T>;
+  } catch {
+    throw new Error(
+      "WordPress GraphQL response was not valid JSON. Check WP_GRAPHQL_URL.",
+    );
+  }
 
   if (json.errors?.length) {
     throw new WordPressGraphQLError(json.errors);

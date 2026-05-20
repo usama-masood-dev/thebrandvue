@@ -32,6 +32,7 @@ export type TestimonialDetails = {
   clientName: string | null;
   companyName: string | null;
   rating: number | null;
+  videoUrl: string | null;
   clientPhoto: WpImageField;
 };
 
@@ -73,6 +74,7 @@ export type Service = {
   id: string;
   title: string | null;
   slug: string | null;
+  content: string | null;
   serviceDetails: ServiceDetails | null;
 };
 

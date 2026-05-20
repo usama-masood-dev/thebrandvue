@@ -67,7 +67,12 @@ export function HeroSlider({ slides }: HeroSliderProps) {
                     {slide.eyebrow}
                   </p>
                   <h1 className="mt-4 max-w-[20rem] font-display text-balance text-[1.65rem] font-semibold leading-[1.2] text-white sm:mt-5 sm:max-w-xl sm:text-3xl md:text-4xl lg:text-[2.75rem] lg:leading-[1.18]">
-                    {slide.title}
+                    {slide.title}{" "}
+                    {slide.titleAccent ? (
+                      <span className="bg-gradient-to-r from-accent to-accent-light bg-clip-text text-transparent">
+                        {slide.titleAccent}
+                      </span>
+                    ) : null}
                   </h1>
                   <p className="mt-4 max-w-[18rem] text-pretty text-sm leading-relaxed text-white/90 sm:mt-5 sm:max-w-lg md:text-base">
                     {slide.description}

@@ -17,6 +17,7 @@ export const TESTIMONIAL_DETAILS_FIELDS = `
   clientName
   companyName
   rating
+  videoUrl
   clientPhoto {
     node {
       ${WP_IMAGE_FIELDS}

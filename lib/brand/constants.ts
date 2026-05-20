@@ -8,4 +8,6 @@ export const BRAND_COLORS = {
 } as const;
 
 export const BRAND_NAME = "The Brand Vue";
-export const BRAND_TAGLINE = "Your Vision, Our Innovation";
+export const BRAND_TAGLINE = "Your vision, our expertise";
+export const BRAND_DESCRIPTION =
+  "At Brand Vue, we combine innovation, design, and strategy to build digital solutions that drive results and elevate your brand.";

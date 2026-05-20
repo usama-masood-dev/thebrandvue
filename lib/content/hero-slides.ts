@@ -8,6 +8,7 @@ export type HeroSlide = {
   image: string;
   eyebrow: string;
   title: string;
+  titleAccent?: string;
   description: string;
   primaryCta: HeroSlideCta;
   secondaryCta?: HeroSlideCta;
@@ -22,18 +23,19 @@ export const heroSlides: HeroSlide[] = [
     title: "We Don't Just Build Software — We Build AI That Works for You",
     description:
       "We build intelligent AI agents and advanced AI-powered solutions that help businesses automate tasks, improve decision-making, and scale faster.",
-    primaryCta: { label: "Schedule a Free Consultation", href: "#contact" },
-    secondaryCta: { label: "See How We Innovate", href: "#portfolio" },
+    primaryCta: { label: "Schedule a Free Consultation", href: "/contact" },
+    secondaryCta: { label: "See How We Innovate", href: "/portfolio" },
   },
   {
     id: "slide-2",
     image: "/hero2.jpg",
-    eyebrow: "Your Vision, Our Innovation",
-    title: "Software Solutions for Exceptional Customer Value",
+    eyebrow: "Your vision, our expertise",
+    title: "Turning Ideas into Impact with",
+    titleAccent: "Technology & Creativity",
     description:
-      "Driving business success through valuable digital experiences — from strategy to launch and beyond.",
-    primaryCta: { label: "Start Your Project", href: "#contact" },
-    secondaryCta: { label: "View Our Work", href: "#portfolio" },
+      "At Brand Vue, we combine innovation, design, and strategy to build digital solutions that drive results and elevate your brand.",
+    primaryCta: { label: "Start Your Project", href: "/contact" },
+    secondaryCta: { label: "View Our Work", href: "/portfolio" },
   },
   {
     id: "slide-3",
@@ -42,8 +44,8 @@ export const heroSlides: HeroSlide[] = [
     title: "Fast, Responsive Websites That Convert",
     description:
       "Modern, scalable web platforms built with cutting-edge technology and a focus on performance and UX.",
-    primaryCta: { label: "Get a Free Quote", href: "#contact" },
-    secondaryCta: { label: "Our Services", href: "#services" },
+    primaryCta: { label: "Get a Free Quote", href: "/contact" },
+    secondaryCta: { label: "Our Services", href: "/services" },
   },
   {
     id: "slide-4",
@@ -52,8 +54,8 @@ export const heroSlides: HeroSlide[] = [
     title: "Grow Your Brand With Data-Driven Campaigns",
     description:
       "SEO, social, and paid media strategies designed to reach the right audience and maximize ROI.",
-    primaryCta: { label: "Boost Your Reach", href: "#contact" },
-    secondaryCta: { label: "Explore Services", href: "#services" },
+    primaryCta: { label: "Boost Your Reach", href: "/contact" },
+    secondaryCta: { label: "Explore Services", href: "/services" },
   },
   {
     id: "slide-5",
@@ -62,8 +64,8 @@ export const heroSlides: HeroSlide[] = [
     title: "Technology Partners for Long-Term Success",
     description:
       "We collaborate closely with you to ship products on time, on budget, and aligned with your business goals.",
-    primaryCta: { label: "Talk to Our Team", href: "#contact" },
-    secondaryCta: { label: "Meet the Team", href: "#team" },
+    primaryCta: { label: "Talk to Our Team", href: "/contact" },
+    secondaryCta: { label: "Meet the Team", href: "/team" },
   },
   {
     id: "slide-6",
@@ -72,7 +74,7 @@ export const heroSlides: HeroSlide[] = [
     title: "Transform Ideas Into Digital Reality",
     description:
       "From startups to enterprises — we deliver solutions that scale with your ambitions.",
-    primaryCta: { label: "Schedule a Call", href: "#contact" },
-    secondaryCta: { label: "See Case Studies", href: "#portfolio" },
+    primaryCta: { label: "Schedule a Call", href: "/contact" },
+    secondaryCta: { label: "See Case Studies", href: "/portfolio" },
   },
 ];

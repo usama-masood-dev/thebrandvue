@@ -1,5 +1,12 @@
 import type { ReactNode } from "react";
 
+/**
+ * Top padding for `<main>` on pages with fixed `StickyHeader`.
+ * Matches shell vertical padding + row min-height (56/60/72px + py).
+ */
+export const SITE_HEADER_OFFSET_CLASS =
+  "pt-[4.75rem] sm:pt-[5.25rem] lg:pt-[6.25rem]";
+
 type HeaderShellProps = {
   children: ReactNode;
   className?: string;

@@ -20,3 +20,101 @@ h3 {
     sans-serif;
   letter-spacing: -0.02em;
 }
+
+/* WordPress HTML on portfolio case-study pages */
+.prose-portfolio {
+  color: var(--foreground);
+  line-height: 1.75;
+}
+
+.prose-portfolio > * + * {
+  margin-top: 1rem;
+}
+
+.prose-portfolio h2,
+.prose-portfolio h3 {
+  margin-top: 2rem;
+  font-weight: 600;
+  color: var(--color-surface-dark, #05080e);
+}
+
+.prose-portfolio p {
+  color: color-mix(in srgb, var(--foreground) 82%, transparent);
+}
+
+.prose-portfolio a {
+  color: var(--color-accent, #07bcae);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose-portfolio ul,
+.prose-portfolio ol {
+  padding-left: 1.25rem;
+}
+
+.prose-portfolio li + li {
+  margin-top: 0.35rem;
+}
+
+.prose-portfolio img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+}
+
+/* Service detail — WordPress HTML overflow on small screens */
+.prose-service {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.prose-service img,
+.prose-service video,
+.prose-service iframe,
+.prose-service embed {
+  max-width: 100%;
+  height: auto;
+}
+
+.prose-service iframe,
+.prose-service embed {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  border-radius: 0.75rem;
+}
+
+.prose-service table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.prose-service pre {
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-size: 0.875rem;
+}
+
+.prose-service h2 {
+  font-size: 1.35rem;
+  line-height: 1.3;
+}
+
+.prose-service h3 {
+  font-size: 1.15rem;
+  line-height: 1.35;
+}
+
+@media (min-width: 640px) {
+  .prose-service h2 {
+    font-size: 1.5rem;
+  }
+
+  .prose-service h3 {
+    font-size: 1.25rem;
+  }
+}

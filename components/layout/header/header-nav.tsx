@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { HeaderCta } from "./header-cta";
-import type { NavItem } from "@/lib/navigation/main-nav";
+import type { NavChildItem, NavItem } from "@/lib/navigation/nav-types";
 
 export type HeaderTheme = "default" | "overlay";
 
@@ -208,10 +208,10 @@ export function HeaderMobileMenu({
                         {isExpanded ? (
                           <ul className="pb-2 pl-2">
                             {item.children!.map((child) => (
-                              <li key={child.label}>
+                              <li key={`${child.href}-${child.label}`}>
                                 <Link
                                   href={child.href}
-                                  className={`block rounded-lg px-3 py-2.5 text-sm ${nav.mobileChild}`}
+                                  className={`block rounded-lg px-3 py-2.5 text-sm ${navDropdownChildClass(child, nav.mobileChild)}`}
                                   onClick={closeMenu}
                                 >
                                   {child.label}
@@ -247,6 +247,13 @@ export function HeaderMobileMenu({
   );
 }
 
+function navDropdownChildClass(child: NavChildItem, baseClass: string) {
+  if (child.viewAll) {
+    return `${baseClass} font-semibold text-accent`;
+  }
+  return baseClass;
+}
+
 function NavDropdown({
   item,
   theme,
@@ -276,11 +283,14 @@ function NavDropdown({
         aria-haspopup="true"
       >
         {item.label}
-        <ChevronDown className={nav.chevron} />
+        <ChevronDown
+          className={`${nav.chevron} ${open ? "rotate-180" : ""} transition-transform`}
+        />
       </Link>
+
       {open ? (
         <ul
-          className={`absolute left-0 top-full z-50 mt-1 min-w-[220px] rounded-xl border py-2 shadow-lg ${
+          className={`absolute left-0 top-full z-50 mt-1 min-w-[12.5rem] rounded-xl border py-1 shadow-lg ${
             isOverlay
               ? "border-white/10 bg-surface-dark"
               : "border-surface-gray/25 bg-white"
@@ -288,11 +298,16 @@ function NavDropdown({
           role="menu"
         >
           {item.children!.map((child) => (
-            <li key={child.label} role="none">
+            <li
+              key={`${child.href}-${child.label}`}
+              role="none"
+              className={child.viewAll ? "border-t border-surface-gray/15" : undefined}
+            >
               <Link
                 href={child.href}
                 role="menuitem"
-                className={`block px-4 py-2.5 text-sm transition-colors ${nav.dropdownChild}`}
+                onClick={onClose}
+                className={`block px-4 py-2 text-sm transition-colors ${navDropdownChildClass(child, nav.dropdownChild)}`}
               >
                 {child.label}
               </Link>
