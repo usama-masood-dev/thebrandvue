@@ -109,6 +109,69 @@ h3 {
   line-height: 1.35;
 }
 
+/* First-visit splash (light logo on dark surface) */
+html.splash-pending,
+html.splash-pending body {
+  overflow: hidden;
+  background: var(--surface-dark);
+}
+
+html.splash-pending #site-content {
+  opacity: 0;
+  pointer-events: none;
+}
+
+html.splash-pending.splash-exiting #site-content {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.6s ease-out;
+}
+
+#splash-static {
+  display: none;
+}
+
+html.splash-pending #splash-static {
+  display: flex;
+}
+
+@keyframes splash-logo-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.splash-root {
+  transition: opacity 0.6s ease-out;
+}
+
+.splash-root--exit {
+  opacity: 0;
+}
+
+.splash-logo-wrap {
+  animation: splash-logo-in 0.55s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.splash-pending.splash-exiting #site-content {
+    transition: none;
+  }
+
+  .splash-root,
+  .splash-root--exit {
+    transition: none;
+  }
+
+  .splash-logo-wrap {
+    animation: none;
+    opacity: 1;
+  }
+}
+
 @media (min-width: 640px) {
   .prose-service h2 {
     font-size: 1.5rem;

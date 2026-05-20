@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { SiteFooter } from "@/components/layout/footer";
 import { NavigationProvider } from "@/components/layout/navigation/navigation-provider";
+import {
+  SplashBlockingScript,
+  SplashCriticalCss,
+  SplashScreen,
+  SplashScreenStatic,
+} from "@/components/layout/splash-screen";
 import { WhatsAppChatWidget } from "@/components/layout/whatsapp-chat-widget";
 import { getNavItems } from "@/lib/navigation/get-nav-items";
 import { brandFavicon, BRAND_NAME, BRAND_DESCRIPTION } from "@/lib/brand";
@@ -29,12 +35,20 @@ export default async function RootLayout({
 
   return (
     <html lang="en" id="top" className={`${fontClassNames} h-full antialiased scroll-smooth`}>
+      <head>
+        <SplashCriticalCss />
+      </head>
       <body className="flex min-h-full flex-col font-sans">
-        <NavigationProvider items={navItems}>
-          <div className="flex-1">{children}</div>
-          <SiteFooter />
-          <WhatsAppChatWidget />
-        </NavigationProvider>
+        <SplashBlockingScript />
+        <SplashScreenStatic />
+        <SplashScreen />
+        <div id="site-content" className="flex min-h-full flex-1 flex-col">
+          <NavigationProvider items={navItems}>
+            <div className="flex-1">{children}</div>
+            <SiteFooter />
+            <WhatsAppChatWidget />
+          </NavigationProvider>
+        </div>
       </body>
     </html>
   );
