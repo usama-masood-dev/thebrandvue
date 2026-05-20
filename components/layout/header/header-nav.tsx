@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { HeaderCta } from "./header-cta";
 import type { NavChildItem, NavItem } from "@/lib/navigation/nav-types";
 
@@ -269,12 +269,37 @@ function NavDropdown({
 }) {
   const isOverlay = theme === "overlay";
   const nav = getNavTheme(theme);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleMouseEnter = () => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+    onOpen();
+  };
+
+  const handleMouseLeave = () => {
+    closeTimerRef.current = setTimeout(() => {
+      onClose();
+      closeTimerRef.current = null;
+    }, 120);
+  };
+
+  useEffect(
+    () => () => {
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+      }
+    },
+    [],
+  );
 
   return (
     <div
       className="relative"
-      onMouseEnter={onOpen}
-      onMouseLeave={onClose}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Link
         href={item.href}
@@ -289,31 +314,33 @@ function NavDropdown({
       </Link>
 
       {open ? (
-        <ul
-          className={`absolute left-0 top-full z-50 mt-1 min-w-[12.5rem] rounded-xl border py-1 shadow-lg ${
-            isOverlay
-              ? "border-white/10 bg-surface-dark"
-              : "border-surface-gray/25 bg-white"
-          }`}
-          role="menu"
-        >
-          {item.children!.map((child) => (
-            <li
-              key={`${child.href}-${child.label}`}
-              role="none"
-              className={child.viewAll ? "border-t border-surface-gray/15" : undefined}
-            >
-              <Link
-                href={child.href}
-                role="menuitem"
-                onClick={onClose}
-                className={`block px-4 py-2 text-sm transition-colors ${navDropdownChildClass(child, nav.dropdownChild)}`}
+        <div className="absolute left-0 top-full z-50 min-w-[12.5rem] pt-2">
+          <ul
+            className={`rounded-xl border py-1 shadow-lg ${
+              isOverlay
+                ? "border-white/10 bg-surface-dark"
+                : "border-surface-gray/25 bg-white"
+            }`}
+            role="menu"
+          >
+            {item.children!.map((child) => (
+              <li
+                key={`${child.href}-${child.label}`}
+                role="none"
+                className={child.viewAll ? "border-t border-surface-gray/15" : undefined}
               >
-                {child.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+                <Link
+                  href={child.href}
+                  role="menuitem"
+                  onClick={onClose}
+                  className={`block px-4 py-2 text-sm transition-colors ${navDropdownChildClass(child, nav.dropdownChild)}`}
+                >
+                  {child.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       ) : null}
     </div>
   );
