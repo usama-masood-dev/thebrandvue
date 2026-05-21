@@ -1,26 +1,19 @@
 import type { NextConfig } from "next";
+import { getWordPressImageHostnames } from "./lib/wordpress/image-hosts";
 
-function getWpImageRemotePattern() {
-  const wpUrl =
-    process.env.NEXT_PUBLIC_WP_URL ?? "https://dev.thebrandvue.com";
-
-  let hostname: string;
-  try {
-    hostname = new URL(wpUrl).hostname;
-  } catch {
-    hostname = "dev.thebrandvue.com";
-  }
-
-  return {
+function getWpImageRemotePatterns() {
+  return getWordPressImageHostnames().map((hostname) => ({
     protocol: "https" as const,
     hostname,
     pathname: "/wp-content/uploads/**",
-  };
+  }));
 }
 
 const nextConfig: NextConfig = {
   images: {
-    remotePatterns: [getWpImageRemotePattern()],
+    /** Set NEXT_IMAGE_UNOPTIMIZED=1 on Hostinger if /_next/image returns errors */
+    unoptimized: process.env.NEXT_IMAGE_UNOPTIMIZED === "1",
+    remotePatterns: getWpImageRemotePatterns(),
   },
 };
 

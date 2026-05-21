@@ -10,7 +10,7 @@ export const siteContact = {
     defaultMessage:
       "Hi *TheBrandVue*! I need more info about TheBrandVue https://thebrandvue.com/",
   },
-  office: "Karachi, Pakistan",
+  office: "Islamabad, Pakistan",
   siteUrl: "https://thebrandvue.com",
 } as const;
 

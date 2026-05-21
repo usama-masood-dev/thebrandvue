@@ -16,7 +16,7 @@ function parseSiteOrigin(name: string, value: string): string {
     return url.origin;
   } catch {
     throw new Error(
-      `Invalid ${name}: "${value}". Expected a full URL (e.g. https://dev.thebrandvue.com).`,
+      `Invalid ${name}: "${value}". Expected a full URL (e.g. https://cms.thebrandvue.com).`,
     );
   }
 }
@@ -31,7 +31,7 @@ function parseGraphqlEndpoint(name: string, value: string): string {
     return url.toString().replace(/\/$/, "");
   } catch {
     throw new Error(
-      `Invalid ${name}: "${value}". Expected the full GraphQL URL (e.g. https://dev.thebrandvue.com/graphql).`,
+      `Invalid ${name}: "${value}". Expected the full GraphQL URL (e.g. https://cms.thebrandvue.com/graphql).`,
     );
   }
 }
